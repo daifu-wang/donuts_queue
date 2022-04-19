@@ -76,4 +76,12 @@ public class OrderQueue {
         }
         return Optional.empty();
     }
+
+    protected int premiumQueueSize(){
+        return premiumOrderQueue.size();
+    }
+
+    protected int normalQueueSize(){
+        return normalOrderQueue.size();
+    }
 }

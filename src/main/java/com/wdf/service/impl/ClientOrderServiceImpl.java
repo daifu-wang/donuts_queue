@@ -41,7 +41,7 @@ public class ClientOrderServiceImpl implements ClientOrderService {
 
         Order order = orderCache.get(clientId);
         if (order==null) {
-            throw new OrderQueueOperationException("No order found");
+            return false;
         }
         order.setIsCanceled(CANCELED);
         orderCache.delete(clientId);

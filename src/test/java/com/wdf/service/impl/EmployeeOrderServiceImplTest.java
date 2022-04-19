@@ -51,33 +51,50 @@ class EmployeeOrderServiceImplTest {
     @Test
     void getNextDelivery() {
 
-        Order order1 = TestDataCreator.createOrderWithOneItem(1, 1, 15);
-        Order order2 = TestDataCreator.createOrderWithOneItem(2, 1, 15);
-        Order order3 = TestDataCreator.createOrderWithOneItem(3, 1, 15);
-        Order order4 = TestDataCreator.createOrderWithOneItem(4, 1, 15);
+        Order order1 = TestDataCreator.createOrderWithOneItem(1, 1, 10);
+        Order order2 = TestDataCreator.createOrderWithOneItem(2, 1, 10);
+        order2.setIsCanceled(true);
+        Order order3 = TestDataCreator.createOrderWithOneItem(3, 1, 10);
+        Order order4 = TestDataCreator.createOrderWithOneItem(4, 1, 10);
+        Order order5 = TestDataCreator.createOrderWithOneItem(1111, 1, 10);
+        Order order6 = TestDataCreator.createOrderWithOneItem(5, 1, 10);
+        Order order7 = TestDataCreator.createOrderWithOneItem(6, 1, 10);
         List<Order> orders = new ArrayList<>();
         orders.add(order1);
         orders.add(order2);
         orders.add(order3);
         orders.add(order4);
+        orders.add(order5);
+        orders.add(order6);
+        orders.add(order7);
 
         List<Order> cart = new ArrayList<>();
 
         when(orderQueue.peek()).thenReturn(Optional.ofNullable(orders.get(0)),
                 Optional.ofNullable(orders.get(1)),
                 Optional.ofNullable(orders.get(2)),
-                Optional.ofNullable(orders.get(3)));
+                Optional.ofNullable(orders.get(3)),
+                Optional.ofNullable(orders.get(5)),
+                Optional.ofNullable(orders.get(6)),
+                Optional.ofNullable(orders.get(4)),
+                Optional.empty());
         when(orderQueue.poll()).thenReturn(Optional.ofNullable(orders.get(0)),
                 Optional.ofNullable(orders.get(1)),
                 Optional.ofNullable(orders.get(2)),
-                Optional.ofNullable(orders.get(3)));
+                Optional.ofNullable(orders.get(3)),
+                Optional.ofNullable(orders.get(5)),
+                Optional.ofNullable(orders.get(6)),
+                Optional.ofNullable(orders.get(4)),
+                Optional.empty());
 
         List<Order> nextDelivery = service.getNextDelivery();
 
-        Assertions.assertEquals(3,nextDelivery.size());
-        Assertions.assertEquals(order1,nextDelivery.get(0));
-        Assertions.assertEquals(order2,nextDelivery.get(1));
-        Assertions.assertEquals(order3,nextDelivery.get(2));
+        Assertions.assertEquals(5, nextDelivery.size());
+        Assertions.assertEquals(order1, nextDelivery.get(0));
+        Assertions.assertEquals(order3, nextDelivery.get(1));
+        Assertions.assertEquals(order4, nextDelivery.get(2));
+        Assertions.assertEquals(order6, nextDelivery.get(3));
+        Assertions.assertEquals(order7, nextDelivery.get(4));
 
     }
 }

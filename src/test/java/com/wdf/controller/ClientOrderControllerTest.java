@@ -57,11 +57,21 @@ class ClientOrderControllerTest {
         Assertions.assertEquals(200,response.getCode().intValue());
         Assertions.assertTrue(response.getResult().getWaitingSeconds() >=1);
         Assertions.assertTrue(response.getResult().getItems().size() ==1);
+
+        when(orderService.getMyOrderInfo(1)).thenReturn(Optional.empty());
+        CommonResponse<OrderVo> response1 = controller.getOrderInfo(1);
+        Assertions.assertEquals(400,response1.getCode().intValue());
     }
 
     @Test
     void cancelOrder() {
+
+        when(orderService.cancelOrder(1)).thenReturn(true);
         CommonResponse response = controller.cancelOrder(1);
         Assertions.assertEquals(200,response.getCode().intValue());
+
+        when(orderService.cancelOrder(1)).thenReturn(false);
+        CommonResponse response1 = controller.cancelOrder(1);
+        Assertions.assertEquals(400,response1.getCode().intValue());
     }
 }

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,5 +81,10 @@ class EmployeeOrderControllerTest {
         Assertions.assertEquals(8,orderVos.get(2).getTotalQuantity().intValue());
         Assertions.assertEquals(7,orderVos.get(3).getTotalQuantity().intValue());
         Assertions.assertEquals(6,orderVos.get(4).getTotalQuantity().intValue());
+
+        when(orderService.getNextDelivery()).thenReturn(Collections.emptyList());
+        CommonResponse<List<OrderVo>> response1 = controller.getNextDelivery();
+        Assertions.assertEquals(200,response1.getCode().intValue());
+        Assertions.assertEquals(0,response1.getResult().size());
     }
 }

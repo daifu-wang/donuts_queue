@@ -52,13 +52,15 @@ public class ClientOrderController {
             return new CommonResponse<>(200, "success", OrderVoTransfer.transfer(order.get()));
         }
 
-        return new CommonResponse<>(200, "No order found", null);
+        return new CommonResponse<>(400, "No order found", null);
     }
 
     @PatchMapping("/{clientId}")
     public CommonResponse cancelOrder(@PathVariable("clientId")Integer clientId) {
-        orderService.cancelOrder(clientId);
-        return new CommonResponse(200, "success");
+        if (orderService.cancelOrder(clientId)){
+            return new CommonResponse(200, "success");
+        }
+        return new CommonResponse(400, "No order found");
     }
 
     private Order createOrder(Integer clientId, List<Item> items) {
